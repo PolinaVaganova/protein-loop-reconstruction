@@ -1,0 +1,41 @@
+refinement {
+  output {
+    prefix = "final_b_factors"
+    serial = 1
+    serial_format = "%d"
+  }
+  refine {
+    strategy = individual_sites individual_sites_real_space rigid_body \
+               *individual_adp group_adp tls occupancies group_anomalous
+    adp {
+      individual {
+        isotropic = all
+      }
+    }
+  }
+  main {
+    ordered_solvent = False
+    number_of_macro_cycles = 1
+    target = auto *ml mlhl ml_sad ls mli
+    scattering_table = wk1995 *it1992 n_gaussian electron neutron
+  }
+#  hydrogens {
+#    refine = individual *riding Auto
+#  }
+  ordered_solvent {
+    mode = second_half filter_only *every_macro_cycle \
+           every_macro_cycle_after_first
+    occupancy_min = 1
+  }
+#  peak_search {
+#    map_next_to_model {
+#      use_hydrogens = True
+#    }
+#  }
+#  mask {
+#    ignore_hydrogens = False
+#  }
+#  structure_factors_and_gradients_accuracy {
+#    algorithm = fft *direct
+#  }
+}

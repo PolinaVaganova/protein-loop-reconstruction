@@ -1,0 +1,4 @@
+1) pdb-formatted files are in 'db' directory with .ent extension
+2) mmcif-formatted files are in 'db' directory with .cif extension. this is the only option for 'large' systems in RCSB
+3) cif- and mtz- files are in 'structure_factors' directory. the proper output has a mask of '*_P1.mtz'
+4) the resultant list of PDB-codes is in log.txt - 1021 structures. BEWARE: some are pretty huge!
