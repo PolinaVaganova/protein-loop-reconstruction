@@ -1,20 +1,109 @@
-# Single structure refinement: example of `1wou`
+# Protein loop reconstruction by using MD simulations and crystallographic data
 
-1. Download a PDB file (coordinates) and CIF file (structure factors) from the RCSB database.
+_This repository provides results and code for the project "Protein loop reconstruction by using MD simulations and
+crystallographic data"_
 
-2. Convert CIF to MTZ using Phenix and expand it to P1 space group:
+**Author:**
+
+* Polina Vaganova _(Saint Petersburg State University, Saint Petersburg, Russia)_
+
+**Supervisors:**
+
+* Olga Lebedenko _(BioNMR laboratory, Saint Petersburg State University, Saint Petersburg, Russia)_
+* Nikolai Skrynnikov _(BioNMR laboratory, Saint Petersburg State University, Saint Petersburg, Russia)_
+
+**Table of contents:**
+
+- [Background](#sec1) </br>
+- [Methods](#sec2) </br>
+- [System requirements](#sec3) </br>
+- [Repository structure](#sec4) </br>
+- [Results](#sec5) </br>
+- [Conclusions](#sec6) </br>
+- [References](#sec7) </br>
+
+<a name="sec1"></a>
+
+### Background:
+
+The conformational plasticity of protein loops plays a critical role in molecular recognition, allosteric control,
+ligand binding, and signaling. However, structural
+variability of protein loops presents a challenge for X-ray crystallography, which is normally limited to static
+structural models. As a consequence, mobile loops are often absent from crystallographic structures deposited in the
+Protein Data Bank (PDB). To rebuild the missing loops, we have used Molecular Dynamics (MD) simulations additionally
+guided by the experimental diffraction data.
+
+**Goal:** The main goal of this project is to reconstruct the protein loop ensemble using Molecular Dynamics (MD)
+simulation guided by the experimental diffraction data.
+
+### Methods:
+
+- A number of protein structures with missing loop regions have been identified by the automated parsing of
+  the [RCSB database](https://www.rcsb.org/).
+- Initial loop conformations were generated using Modeller program.
+- MD-based refinement procedure has been performed using AMBER platform on structural models in a form of crystal unit
+  cells or supercells.
+- The refined models involving multiple loop conformations have been validated against the available electron density
+  maps using phenix.molprobity module.
+
+<a name="sec3"></a>
+
+### System requirements:
+
+**Key packages and programs:**
+
+- [Python](https://www.python.org/downloads/) (>= 3.9)
+- [Amber22](https://ambermd.org/index.php) (a build with MPI is employed)
+- [Modeller](https://salilab.org/modeller/download_installation.html) (10.4) package for loop modelling
+- [phenix](https://phenix-online.org) software package for macromolecular structure determination
+- [pyxmolpp2](https://github.com/sizmailov/pyxmolpp2) (1.6.0) in-house python library for processing molecular
+  structures and MD trajectories
+- `slurm` (20.11.8) cluster management and job scheduling system
+- other python libraries used are listed in `requirements.txt`
+
+<a name="sec4"></a>
+
+### Repository structure:
+
+- [0_prepare_annotation](0_prepare_annotation) contains rcsb annotation results
+- [1_annotated_rcsb](1_annotated_rcsb) contains annotation only for monomers with different symmetry operations
+- [2_rcsb_data](2_rcsb_data) contains examples for input files
+- [3_loop_building](3_loop_building) contains examples for building initial loop conformation
+- [4_protocol_run](4_protocol_run) contains examples for running MD-based refinement protocol
+- [arx](arx) contains special module for AMBER
+- [utils](utils) contains python scripts for annotations, filtering, loop building and input preparation
+
+### Single structure loop building: example of `1k33`
+
+1. Download a PDB file (coordinates), CIF file (structure factors) and FASTA file (aminoacid sequence) from
+   the [RCSB database](https://www.rcsb.org/). Place files into corresponding folders in `2_rcsb_data` dir.
+
+2. Go to `2_rcsb_data/mtz` dir and convert CIF to MTZ using Phenix. Then expand it to P1 space group:
+
 ```bash
-phenix.cif_as_mtz 1WOU-sf.cif --ignore_bad_sigmas --merge --output_file_name=1wou-sf.mtz
-phenix.reflection_file_converter --expand_to_p1 1wou-sf.mtz --write_mtz_amplitudes --mtz_root_label="FOBS" --label="FOBS" --generate_r_free_flags --non_anomalous --mtz 1wou.mtz
+cd 2_rcsb_data/mtz
+phenix.cif_as_mtz ../cif/1k33-sf.cif --ignore_bad_sigmas --merge --output_file_name=1k33-sf.mtz
+phenix.reflection_file_converter --expand_to_p1 1k33-sf.mtz --write_mtz_amplitudes --mtz_root_label="FOBS" --label="FOBS" --generate_r_free_flags --non_anomalous --mtz 1k33.mtz
 ```
 
-3. Create topology (and coordinate) file from PDB:
+3. Build initial loop using Modeller. Please, adjust the `pdb_ids` variable in the `run_phenix.sh` accordingly before
+   running it.
 
-   * Put the PDB and P1-MTZ files into `data/input/1wou` directory of the cloned repo.
+```bash
+cd ../..
+python utils/modeller/model.py
+```
 
-   * `source` AMBER, since we rely on its Python libraries.
+4. Create topology (and coordinate) file from PDB:
 
-   * Set up Python virtual environment and install dependencies (to avoid potential conflicts, use `amber.python`):
+    * Copy pdn and P1-MTZ files into input dir:
+    ```bash
+   python utils/prepare_inputs/1_copy_inputs.py
+    ```
+
+    * `source` AMBER, since we rely on its Python libraries.
+
+    * Set up Python virtual environment and install dependencies (to avoid potential conflicts, use `amber.python`):
    ```bash
    amber.python -m venv venv
    source venv/bin/activate
@@ -22,81 +111,52 @@ phenix.reflection_file_converter --expand_to_p1 1wou-sf.mtz --write_mtz_amplitud
    pip install -r requirements.txt
    ```
 
-   * Add the repo's directory into `PYTHONPATH` variable
+    * Add the repo's directory into `PYTHONPATH` variable
    ```bash
    export PYTHONPATH=$PYTHONPATH:$(pwd)
    ```
 
-   * Run the script to prepare a model
+    * Run the script to prepare a model
    ```bash
-   python tools/prepare-structures.py
+   python utils/prepare_inputs/2_prepare-structures.py
    ```
-   The results will be written to `data/amber-topology/1wou`.
+   The results will be written to `4_protocol_run/amber-topology/1k33/`.
 
 4. Prepare the refinement job:
+
 ```bash
 python init.py
 ```
-First, as a preparatory step for the x-ray restrained MD run, one needs to convert MTZ into a simple text format (described in the AMBER manual). File conversion is performed by `write_sf_dat_file()` method of `init.py`. Second, one needs to create x-ray-specific topology file. The expansion of the topology file (adding crystallographic parameters) is performed by `prepare_xray_prmtop()` method  of `init.py`. The files are written to `data/output/1wou`. Note that the script automatically reads the number of residues from the topology file and uses it during the refinement (`heating`, `evolution` and `cooling` stages).
 
-If you wish to employ a 2x2x2 supercell model instead of the unit cell model, please, open the file `init.py` and add `.sc` postfix to the name of the folder in the `main()` function (i.e. replace `prepared` with `prepared.sc`).
+First, as a preparatory step for the x-ray restrained MD run, one needs to convert MTZ into a simple text format (
+described in the AMBER manual). File conversion is performed by `write_sf_dat_file()` method of `init.py`. Second, one
+needs to create x-ray-specific topology file. The expansion of the topology file (adding crystallographic parameters) is
+performed by `prepare_xray_prmtop()` method of `init.py`. The files are written to `4_protocol_run/output/1k33/`. Note
+that the
+script automatically reads the number of residues from the topology file and uses it during the
+refinement (`heating`, `evolution` and `cooling` stages).
+
+If you wish to employ a 2x2x2 supercell model instead of the unit cell model, please, open the file `init.py` and
+add `.sc` postfix to the name of the folder in the `main()` function (i.e. replace `prepared` with `prepared.sc`).
 
 5. Finally, run the refinement job locally by executing:
+
 ```bash
 python run_locally.py
 ```
-Alternatively, if you want to use a different machine, you should employ `LocalSlurmWorker` remote runner and execute `python run_remotely.py` instead. NB: Don't forget to adjust paths that are `source`d and `export`ed (in essence, environmental variables should be defined similar to step 3). The results will be written to `data/output/1wou`.
 
+Alternatively, if you want to use a different machine, you should employ `LocalSlurmWorker` remote runner and
+execute `python run_remotely.py` instead. NB: Don't forget to adjust paths that are `source`d and `export`ed (in
+essence, environmental variables should be defined similar to step 3). The results will be written
+to `4_protocol_run/output/1k33`.
 
-# Water picking, B-factors refinement and MolProbity reports generation
+### Water picking, B-factors refinement and MolProbity reports generation
 
-Historically, these tasks were executed separately from the Amber-based pipeline. The related files can be found in the `tools/phenix_tasks` directory. Please, adjust the paths in the `run_phenix.sh` accordingly before running it. The first argument of the script should be the path to the PDB file, the second one - the path to the MTZ file.
+Historically, these tasks were executed separately from the AMBER-based pipeline. The related files can be found in
+the `4_protocol_run/phenix_refinment` directory. Please, adjust the paths in the `run_phenix_remotely.py` accordingly
+before running it (change `{your_path_to_repo}` with your actually path).
 
+If you want to run locally without slurm then launch `residue_renamer.py` on your pdb, adjust the paths in
+the `phenix.sh` and launch it. The first argument of the script should be the path to the PDB file, the second one - the
+path to the MTZ file.
 
-# Batch refinement (summary of commands)
-
-```bash
-# Copy the structures (PDB and MTZ files) from a given directory to `data/input/`
-python tools/copy-search-results.py
-
-# Create Amber coordinate/topology (rst7, parm7 and corresponding pdb) files
-python tools/prepare-structures.py
-
-# Generate MD protocols
-# Note: change the list of structure you wish to iterate through
-python init.py
-
-# Run MD protocols
-python run_locally.py
-```
-
-# Development of the pipeline
-
-### Set up environment
-
-```bash
-python3.9 -m venv venv
-source venv/bin/activate
-pip install -U pip wheel setuptools
-```
-
-### Install dependencies
-
-```bash
-pip install pip-tools
-pip-sync requirements-dev.txt
-pre-commit install
-```
-
-### Run linters
-
-```bash
-# Pre-commit hooks
-pre-commit run --all-files
-```
-
-### Update requirements
-
-```bash
-./dev-tools/rebuild-requirements.sh
-```
