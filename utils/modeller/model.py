@@ -104,6 +104,8 @@ if __name__ == "__main__":
     # pdb_df = pd.read_csv(path_to_csv, sep=',')
     # pdb_ids = pdb_df['pdb_id']
 
+    pdb_ids = ['1k33']
+    
     for pdb_id in pdb_ids:
         if not os.path.exists(pdb_id):
             os.chdir(cwd)
