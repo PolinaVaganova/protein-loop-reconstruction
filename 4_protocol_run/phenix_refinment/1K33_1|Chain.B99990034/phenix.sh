@@ -1,0 +1,1 @@
+/home/polina/xray-refinement/4_protocol_run/phenix_refinment/phenix.sh

@@ -1,0 +1,5 @@
+
+addPdb inputs/wbox.pdb elem strict allicodes
+lmod
+parmout 0_prepare/tmp.parm7
+go
