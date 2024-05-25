@@ -1,5 +1,4 @@
 import sys
-
 import gemmi
 
 
@@ -41,18 +40,11 @@ def rename_residues_amber_to_standard(st: gemmi.Structure):
         res.name = rename_map.get(res.name, res.name)
 
 
-def rename_residues_in_pdb(filename: str):
-    input_file_name = filename
-    output_file_name = filename.strip(".pdb") + "_renamed.pdb"
+def rename_residues_in_pdb(input_file_name: str, output_file_name: str):
     final = gemmi.read_pdb(input_file_name, split_chain_on_ter=True)
     rename_residues_amber_to_standard(final)
     final.write_pdb(output_file_name, numbered_ter=False, ter_ignores_type=True)
 
 
 if __name__ == "__main__":
-    try:
-        rename_residues_in_pdb(sys.argv[1])
-    except FileNotFoundError:
-        print("File does not exist.")
-    except ValueError:
-        print("File does not have a proper extension.")
+    rename_residues_in_pdb(sys.argv[1], sys.argv[2])
