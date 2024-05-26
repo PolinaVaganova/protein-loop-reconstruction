@@ -122,6 +122,7 @@ After refinement procedure we observed the dramatic improvement in $R_{work}$ / 
 - [4_protocol_run](4_protocol_run) contains examples for running MD-based refinement protocol
 - [arx](arx) contains special module for AMBER
 - [utils](utils) contains python scripts for annotations, filtering, loop building and input preparation
+- [figures](figures) contains figures for README.md you are currently reading
 
 <a name="sec5"></a>
 
