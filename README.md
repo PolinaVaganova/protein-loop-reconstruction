@@ -86,12 +86,12 @@ $R_{work}$ / $R_{free}$ for Modeller resulting structure are 0.316 / 0.317.
 Subsequently, MD-based crystallographic refinement procedure has been performed on
 structural models in a form of crystal unit cells or supercells (Figure 4).
 
-The refined models involving multiple loop conformations have been validated against the available electron density
+The refined models involving multiple loop conformations (Figure 5) have been validated against the available electron density
 maps using [phenix.molprobity](https://phenix-online.org/documentation/reference/molprobity_tool.html) module.
 
-| ![1k33_without_loop.png](/figures/1k33_without_loop.png) |     ![1k33_with_loop.png](/figures/1k33_loop_modeller.png)      | ![1k33_ucell.png](/figures/1k33_ucell.png) |   ![1k33_loop_ensemble.png](/figures/1k33_loop_ensemble.png)   |
-|:--------------------------------------------------------:|:---------------------------------------------------------------:|:------------------------------------------:|:--------------------------------------------------------------:|
-|  *Figure 2. Structure of `1k33` without loop residues.*  | *Figure 3. Structure of `1k33` with built loop residues (red).* | *Figure 4. Structure of `1k33` unit cell.* | *Figure 5. Loop ensemble of `1k33` with difference Fo-Fc map.* |
+| ![1k33_without_loop.png](/figures/1k33_without_loop.png) |     ![1k33_with_loop.png](/figures/1k33_loop_modeller.png)      | ![1k33_ucell.png](/figures/1k33_ucell.png) | ![1k33_loop_ensemble.png](/figures/1k33_loop_ensemble.png) |
+|:--------------------------------------------------------:|:---------------------------------------------------------------:|:------------------------------------------:|:----------------------------------------------------------:|
+|  *Figure 2. Structure of `1k33` without loop residues.*  | *Figure 3. Structure of `1k33` with built loop residues (red).* | *Figure 4. Structure of `1k33` unit cell.* |            *Figure 5. Loop ensemble of `1k33`.*            |
 
 After refinement procedure we observed the dramatic improvement in $R_{work}$ / $R_{free}$ from 0.206 / 0.226 (RCSB) to
 0.181 / 0.202 in our new approach.
