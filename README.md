@@ -18,9 +18,8 @@ crystallographic data"_
 - [Methods](#sec2) </br>
 - [System requirements](#sec3) </br>
 - [Repository structure](#sec4) </br>
-- [Results](#sec5) </br>
-- [Conclusions](#sec6) </br>
-- [References](#sec7) </br>
+- [Single structure loop building: example of `1k33`](#sec5) </br>
+- [References](#sec6) </br>
 
 <a name="sec1"></a>
 
@@ -35,6 +34,8 @@ guided by the experimental diffraction data.
 
 **Goal:** The main goal of this project is to reconstruct the protein loop ensemble using Molecular Dynamics (MD)
 simulation guided by the experimental diffraction data.
+
+<a name="sec2"></a>
 
 ### Methods:
 
@@ -72,6 +73,8 @@ simulation guided by the experimental diffraction data.
 - [4_protocol_run](4_protocol_run) contains examples for running MD-based refinement protocol
 - [arx](arx) contains special module for AMBER
 - [utils](utils) contains python scripts for annotations, filtering, loop building and input preparation
+
+<a name="sec5"></a>
 
 ### Single structure loop building: example of `1k33`
 
@@ -150,7 +153,7 @@ execute `python run_remotely.py` instead. NB: Don't forget to adjust paths that 
 essence, environmental variables should be defined similar to step 3). The results will be written
 to `4_protocol_run/output/1k33`.
 
-### Water picking, B-factors refinement and MolProbity reports generation
+6. Water picking, B-factors refinement and MolProbity reports generation
 
 Historically, these tasks were executed separately from the AMBER-based pipeline. The related files can be found in
 the `4_protocol_run/phenix_refinment` directory. Please, adjust the paths in the `run_phenix_remotely.py` accordingly
@@ -160,3 +163,10 @@ If you want to run locally without slurm then launch `residue_renamer.py` on you
 the `phenix.sh` and launch it. The first argument of the script should be the path to the PDB file, the second one - the
 path to the MTZ file.
 
+<a name="sec6"></a>
+
+### References
+
+<a name="arx">[1]</a>
+Mikhailovskii, O., Xue, Y., Skrynnikov, N. R. Modeling a Unit Cell: Crystallographic Refinement Procedure Using the
+Biomolecular MD Simulation Platform Amber. 2022. IUCrJ, 9 (1): 114–133. https://doi.org/10.1107/S2052252521011891.
