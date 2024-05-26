@@ -25,12 +25,34 @@ crystallographic data"_
 
 ### Background:
 
-The conformational plasticity of protein loops plays a critical role in molecular recognition, allosteric control,
-ligand binding, and signaling. However, structural
-variability of protein loops presents a challenge for X-ray crystallography, which is normally limited to static
-structural models. As a consequence, mobile loops are often absent from crystallographic structures deposited in the
-Protein Data Bank (PDB). To rebuild the missing loops, we have used Molecular Dynamics (MD) simulations additionally
-guided by the experimental diffraction data.
+To date, X-ray crystallography remains a primary experimental method for elucidation of three-dimensional (3D) protein
+structure. The diffraction process is fundamentally different from microscopic imaging; crystallography is not an
+imaging technique. The crucial difference is that visible light scattered from objects can be focused through refractive
+lenses to create a magnified image of the object. This is not the case for X-rays, which are also electromagnetic
+radiation but of several orders of magnitude shorter wavelength and correspondingly higher energy; the
+refractive index of X-rays in different materials si essentially equal and close to unity, and no refractive lenses can
+be constructed for X-rays. Instead, the electron density of the scattering molecular structure must be reconstructed by
+special technique (Fourier transform). In itself, the Fourier reconstruction from reciprocal diffraction space back
+into direct molecular space poses no difficulties in principle, with the unfortunate qualifier that for this type of
+reconstruction two terms are needed as Fourier coefficients: the structure factor amplitudes, readily accessible in the
+form of the square root of the measured ($F_{obs}$) and corrected ($F_{calc}$) diffraction spot intensities (Figure 1);
+
+|    ![xray-experiment.png](/figures/xray-experiment.png)     |
+|:-----------------------------------------------------------:|
+| *Figure 1. The principle of X-ray structure determination.* |
+
+The 3D structure is formed by secondary struture elements (e.g. α-helices and β-strands) as well as loosely
+structured elements such as loops. Protein loops are often functionally important. Their conformational plasticity is
+key to molecular recognition, allosteric control, ligand binding, and signaling.
+
+However, the structural variability of protein loops presents a challenge for the X-ray crystallography
+which is normally limited to static structural models. As a consequence, mobile loops are
+often absent from the crystallographic structures deposited in the Protein Data Bank (PDB).
+Nevertheless, residual electron density associated with such loops can be used to rebuild them
+in a form of conformational ensemble. To this end, we have used Molecular Dynamics (MD)
+simulations additionally guided by the experimental diffraction data. The appropriate
+crystallographic refinement procedure has been developed in our laboratory using the
+biomolecular MD simulation platform Amber [[1]](#arx).
 
 **Goal:** The main goal of this project is to reconstruct the protein loop ensemble using Molecular Dynamics (MD)
 simulation guided by the experimental diffraction data.
@@ -39,8 +61,9 @@ simulation guided by the experimental diffraction data.
 
 ### Methods:
 
-- A number of protein structures with missing loop regions have been identified by the automated parsing of
-  the [RCSB database](https://www.rcsb.org/).
+Protein structures with missing loop regions and different levels of residual electron density at the disordered loop
+sites have been identified by the automated parsing of [RCSB database](https://www.rcsb.org/).
+
 - Initial loop conformations were generated using Modeller program.
 - MD-based refinement procedure has been performed using AMBER platform on structural models in a form of crystal unit
   cells or supercells.
