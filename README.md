@@ -86,8 +86,8 @@ $R_{work}$ / $R_{free}$ for Modeller resulting structure are 0.316 / 0.317.
 Subsequently, MD-based crystallographic refinement procedure has been performed on
 structural models in a form of crystal unit cells or supercells (Figure 4).
 
-The refined models involving multiple loop conformations (Figure 5) have been validated against the available electron density
-maps using [phenix.molprobity](https://phenix-online.org/documentation/reference/molprobity_tool.html) module.
+The refined models involving multiple loop conformations (Figure 5) have been validated against the available electron
+density maps using [phenix.molprobity](https://phenix-online.org/documentation/reference/molprobity_tool.html) module.
 
 | ![1k33_without_loop.png](/figures/1k33_without_loop.png) |     ![1k33_with_loop.png](/figures/1k33_loop_modeller.png)      | ![1k33_ucell.png](/figures/1k33_ucell.png) | ![1k33_loop_ensemble.png](/figures/1k33_loop_ensemble.png) |
 |:--------------------------------------------------------:|:---------------------------------------------------------------:|:------------------------------------------:|:----------------------------------------------------------:|
@@ -204,9 +204,9 @@ to `4_protocol_run/output/1k33`.
 
 6. Water picking, B-factors refinement and MolProbity reports generation
 
-Historically, these tasks were executed separately from the AMBER-based pipeline. The related files can be found in
-the `4_protocol_run/phenix_refinment` directory. Please, adjust the paths in the `run_phenix_remotely.py` accordingly
-before running it (change `{your_path_to_repo}` with your actually path).
+Historically, these tasks were executed separately from the AMBER-based pipeline with phenix software [[2]](#phenix). 
+The related files can be found in the `4_protocol_run/phenix_refinment` directory. Please, adjust the paths in the 
+`run_phenix_remotely.py` accordingly before running it (change `{your_path_to_repo}` with your actually path).
 
 If you want to run locally without slurm then launch `residue_renamer.py` on your pdb, adjust the paths in
 the `phenix.sh` and launch it. The first argument of the script should be the path to the PDB file, the second one - the
@@ -219,3 +219,8 @@ path to the MTZ file.
 <a name="arx">[1]</a>
 Mikhailovskii, O., Xue, Y., Skrynnikov, N. R. Modeling a Unit Cell: Crystallographic Refinement Procedure Using the
 Biomolecular MD Simulation Platform Amber. 2022. IUCrJ, 9 (1): 114–133. https://doi.org/10.1107/S2052252521011891.
+
+<a name="phenix">[2]</a>
+Liebschner, D., Afonine, P. V., Baker, M. L. et al. 2019. Macromolecular structure determination using x-rays, neutrons
+and electrons: recent developments in phenix. Acta Crystallogr D Struct Biol. 75, 861–877. 
+https://doi.org/10.1107/S2059798319011471
