@@ -36,12 +36,22 @@ special technique (Fourier transform). In itself, the Fourier reconstruction fro
 into direct molecular space poses no difficulties in principle, with the unfortunate qualifier that for this type of
 reconstruction two terms are needed as Fourier coefficients: the structure factor amplitudes, readily accessible in the
 form of the square root of the measured ($F_{obs}$) and corrected ($F_{calc}$) diffraction spot intensities (Figure 1);
+and as a second term for each observed diffraction spot, its relative phase angle.
 
 |    ![xray-experiment.png](/figures/xray-experiment.png)     |
 |:-----------------------------------------------------------:|
 | *Figure 1. The principle of X-ray structure determination.* |
 
-The 3D structure is formed by secondary struture elements (e.g. α-helices and β-strands) as well as loosely
+These phase angles are not directly accessible and must be adjusted during special procedure, called refinement. In
+refinement procedure we are adjusting phase angles to obtain a best fit between the observed structure factor
+amplitudes (($F_{obs}$)) and the computed model structure factor amplitudes ($F_{calc}$). The overall fit between
+diffraction data and model is numerically quantified by a global linear residual (the R-value) between the scaled
+structure factor amplitudes $F_{obs}$ and $F_{calc}$:
+$R = \frac{{\sum\limits_{hkl} |F_{\text{obs}} - F_{\text{calc}}|}}{{\sum\limits_{hkl} |F_{\text{obs}}|}}$, where $hkl$
+Miller indexes for each of reflection spots.
+
+The X-ray crystallography technique operates with static images of molecular structures. The 3D structure is formed by
+secondary struture elements (e.g. α-helices and β-strands) as well as loosely
 structured elements such as loops. Protein loops are often functionally important. Their conformational plasticity is
 key to molecular recognition, allosteric control, ligand binding, and signaling.
 
@@ -62,13 +72,29 @@ simulation guided by the experimental diffraction data.
 ### Methods:
 
 Protein structures with missing loop regions and different levels of residual electron density at the disordered loop
-sites have been identified by the automated parsing of [RCSB database](https://www.rcsb.org/).
+sites have been identified by the automated parsing of [RCSB database](https://www.rcsb.org/). An example of one such
+structure (PDB: `1k33`) is illustrated in Figure 2.
 
-- Initial loop conformations were generated using Modeller program.
-- MD-based refinement procedure has been performed using AMBER platform on structural models in a form of crystal unit
-  cells or supercells.
-- The refined models involving multiple loop conformations have been validated against the available electron density
-  maps using phenix.molprobity module.
+$R_{work}$ / $R_{free}$ for this deposited structure are 0.206 / 0.226.
+
+Initial loop conformations were generated using programs such as Modeller or Rapper (Figure 3). This step doesn't
+operate with
+electron density data and thus the resulting structure has worse scores (higher is worse).
+
+$R_{work}$ / $R_{free}$ for Modeller resulting structure are 0.316 / 0.317.
+
+Subsequently, MD-based crystallographic refinement procedure has been performed on
+structural models in a form of crystal unit cells or supercells (Figure 4).
+
+The refined models involving multiple loop conformations have been validated against the available electron density
+maps using [phenix.molprobity](https://phenix-online.org/documentation/reference/molprobity_tool.html) module.
+
+| ![1k33_without_loop.png](/figures/1k33_without_loop.png) |     ![1k33_with_loop.png](/figures/1k33_loop_modeller.png)      | ![1k33_ucell.png](/figures/1k33_ucell.png) |   ![1k33_loop_ensemble.png](/figures/1k33_loop_ensemble.png)   |
+|:--------------------------------------------------------:|:---------------------------------------------------------------:|:------------------------------------------:|:--------------------------------------------------------------:|
+|  *Figure 2. Structure of `1k33` without loop residues.*  | *Figure 3. Structure of `1k33` with built loop residues (red).* | *Figure 4. Structure of `1k33` unit cell.* | *Figure 5. Loop ensemble of `1k33` with difference Fo-Fc map.* |
+
+After refinement procedure we observed the dramatic improvement in $R_{work}$ / $R_{free}$ from 0.206 / 0.226 (RCSB) to
+0.181 / 0.202 in our new approach.
 
 <a name="sec3"></a>
 
